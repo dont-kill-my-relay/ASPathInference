@@ -295,6 +295,7 @@ char* CSimpleRoutingTable::GetPathString(off_t offset, u_int8_t len) {
 	temp[0]='\0';
 	for(int i = 0; i < len; i ++) {
 		sprintf(temp, "%s %d", temp, pathstr[i]);
+		// sprintf(temp + strlen(temp), " %d", pathstr[i]);
 	}
 	delete pathstr;
 	return temp;
@@ -350,8 +351,10 @@ bool CSimpleRoutingTable::GetAllPathStr(CPrefix *prefix, u_int32_t asn, char* st
 			if(result) {
 				if(asn != 0) {
 					sprintf(str, "%s%d %d%s\n", str, counter, counter2, GetPathString(pathptr, pathlen));
+					// sprintf(str + strlen(str), "%d %d%s\n", counter, counter2, GetPathString(pathptr, pathlen));
 				}else {
 					sprintf(str, "%s%d%s\n", str, counter, GetPathString(pathptr, pathlen));
+					// sprintf(str + strlen(str), "%d%s\n", counter, GetPathString(pathptr, pathlen));
 				}
 			}else {
 				if(!upstop) {

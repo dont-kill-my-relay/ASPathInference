@@ -31,7 +31,7 @@
  * Date: 5/16/2005
  **/
 
-#include <python2.6/Python.h>
+#include <python2.7/Python.h>
 #include "StdAfx.h"
 #include "VMEMstd.h"
 #include "VMEM.h"

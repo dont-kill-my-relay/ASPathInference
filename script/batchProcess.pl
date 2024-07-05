@@ -9,6 +9,7 @@ use File::Basename;
 $prog_base = dirname(dirname(File::Spec->rel2abs(__FILE__)));
 
 $home = shift;
+$input_date = shift;
 
 if (!$home) {
 	$home = getcwd();
@@ -18,12 +19,12 @@ print $home."\n";
 
 $table = "oix-snapshot.dat";
 
-$command = "$prog_base/script/batchCreateDB.pl $home";
+$command = "$prog_base/script/batchCreateDB.pl $home $input_date";
 print $command."\n";
 system($command);
 
 #$command = "$home/inferASrelationship_degree.py $home/$table $home/tmp/oix_relation_degree $home/tmp/oix_relation_degree2 $home/tmp/oix_degree $home/tmp/oix_preference $home/tmp/known_aslist >> $home/access_log 2>&1";
-$command = "$prog_base/script/inferRelation.py --table $home/tables/$table --as-relationship $home/tmp/oix_relation_degree --link-preference $home/tmp/oix_preference >> $home/log/access_log 2>&1";
+$command = "$prog_base/script/inferRelation.py --table $home/tables/$table --as-relationship $home/tmp/oix_relation_degree --link-preference $home/tmp/oix_preference";
 print $command."\n";
 system($command);
 
@@ -36,5 +37,5 @@ print $command."\n";
 system($command);
 
 $command = "$prog_base/script/startInfer.sh $home";
-print $command."\n";
-system($command);
+# print $command."\n";
+# system($command);

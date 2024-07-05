@@ -178,6 +178,7 @@ CBGPUpdateViewHeader::CBGPUpdateViewHeader(CBGPUpdateLog* bul)
 	void* buf = bul->GetValue(sizeof(CBGPUpdateViewHeader));
 	if(buf != NULL) {
 		memcpy(this, buf, sizeof(CBGPUpdateViewHeader));
+		// *this = *reinterpret_cast<const CBGPUpdateViewHeader*>(buf);
 		MyUtil::ConvType(&m_view, sizeof(u_int16_t));
 		MyUtil::ConvType(&m_seq, sizeof(u_int16_t));
 		m_prefix.ConvType();
@@ -208,8 +209,10 @@ CBGPUpdateViewHeader::CBGPUpdateViewHeader(CBGPUpdateViewHeader& clone)
 
 char *CBGPUpdateViewHeader::toString() {
 	static char temp[128];
+	// temp[0] = '\0';
 	sprintf(temp, "VIEW: #%d SEQ: %d Prefix: %s/%d Status: %d Len: %d\n", m_view, m_seq, m_prefix.toString(), m_mask, m_status, m_attrlen);
 	sprintf(temp, "%sLastchange: %sPeer: %s AS: %d ", temp, ctime(&m_lastchange), m_peer_ip.toString(), m_peer_as);
+	// sprintf(temp + strlen(temp), "Lastchange: %sPeer: %s AS: %d ", ctime(&m_lastchange), m_peer_ip.toString(), m_peer_as);
 	return temp;
 }
 
@@ -224,6 +227,7 @@ CBGPUpdateViewHeader6::CBGPUpdateViewHeader6(CBGPUpdateLog* bul)
 	void* buf = bul->GetValue(sizeof(CBGPUpdateViewHeader6));
 	if(buf != NULL) {
 		memcpy(this, buf, sizeof(CBGPUpdateViewHeader6));
+		// *this = *reinterpret_cast<const CBGPUpdateViewHeader6*>(buf);
 		MyUtil::ConvType(&m_view, sizeof(u_int16_t));
 		MyUtil::ConvType(&m_seq, sizeof(u_int16_t));
 		m_prefix.ConvType();
@@ -251,8 +255,10 @@ CBGPUpdateViewHeader6::CBGPUpdateViewHeader6(CBGPUpdateViewHeader6& clone)
 
 char *CBGPUpdateViewHeader6::toString() {
 	static char temp[128];
+	// temp[0] = '\0';
 	sprintf(temp, "VIEW: #%d SEQ: %d Prefix: %s/%d Status: %d Len: %d\n", m_view, m_seq, m_prefix.toString(), m_mask, m_status, m_attrlen);
 	sprintf(temp, "%sLastchange: %sPeer: %s AS: %d ", temp, ctime(&m_lastchange), m_peer_ip.toString(), m_peer_as);
+	// sprintf(temp + strlen(temp), "Lastchange: %sPeer: %s AS: %d ", ctime(&m_lastchange), m_peer_ip.toString(), m_peer_as);
 	return temp;
 }
 
@@ -263,6 +269,7 @@ CBGPUpdateStateBody::CBGPUpdateStateBody()
 CBGPUpdateStateBody::CBGPUpdateStateBody(CBGPUpdateLog* bul)
 {
 	memcpy(this,bul->GetValue(sizeof(CBGPUpdateStateBody)),sizeof(CBGPUpdateStateBody));
+	// *this = *reinterpret_cast<const CBGPUpdateStateBody*>(bul->GetValue(sizeof(CBGPUpdateStateBody)));
 	MyUtil::ConvType(&m_src_ip,sizeof(CIPAddress));
 	MyUtil::ConvType(&m_dest_ip,sizeof(CIPAddress));
 	MyUtil::ConvType(&m_old_state,sizeof(u_int16_t));
@@ -284,6 +291,7 @@ CBGPUpdateStateBody6::CBGPUpdateStateBody6()
 CBGPUpdateStateBody6::CBGPUpdateStateBody6(CBGPUpdateLog* bul)
 {
 	memcpy(this,bul->GetValue(sizeof(CBGPUpdateStateBody6)),sizeof(CBGPUpdateStateBody6));
+	// *this = *reinterpret_cast<const CBGPUpdateStateBody6*>(bul->GetValue(sizeof(CBGPUpdateStateBody6)));
 	MyUtil::ConvType(&m_src_ip,sizeof(CIPAddress6));
 	MyUtil::ConvType(&m_dest_ip,sizeof(CIPAddress6));
 	MyUtil::ConvType(&m_old_state,sizeof(u_int16_t));
@@ -309,6 +317,7 @@ CBGPMessageHeader::CBGPMessageHeader(CBGPUpdateLog* bul)
 	void* buf = bul->GetValue(sizeof(CBGPMessageHeader));
 	if(buf != NULL) {
 		memcpy(this, buf, sizeof(CBGPMessageHeader));
+		// *this = *reinterpret_cast<const CBGPMessageHeader*>(buf);
 		MyUtil::ConvType(&m_src_ip,sizeof(CIPAddress));
 		MyUtil::ConvType(&m_dest_ip,sizeof(CIPAddress));
 		//MyUtil::ConvType(m_marker,sizeof(u_int8_t)*16);
@@ -332,9 +341,11 @@ CBGPMessageHeader::CBGPMessageHeader(CBGPMessageHeader& clone)
 char* CBGPMessageHeader::toString()
 {
 	static char temp[256];
+	// temp[0] = '\0';
 
 	sprintf(temp,"src: %s", m_src_ip.toString());
 	sprintf(temp,"%s dest: %s length: %d type: %d",temp,m_dest_ip.toString(),m_length,m_type);
+	// sprintf(temp + strlen(temp)," dest: %s length: %d type: %d",m_dest_ip.toString(),m_length,m_type);
 
 	return temp;
 }
@@ -350,6 +361,7 @@ CBGPMessageHeader6::CBGPMessageHeader6(CBGPUpdateLog* bul)
 	void* buf = bul->GetValue(sizeof(CBGPMessageHeader6));
 	if(buf != NULL) {
 		memcpy(this, buf, sizeof(CBGPMessageHeader6));
+		// *this = *reinterpret_cast<const CBGPMessageHeader6*>(buf);
 		//MyUtil::ConvType(&m_src_ip,sizeof(CIPAddress6));
 		m_src_ip.ConvType();
 		//MyUtil::ConvType(&m_dest_ip,sizeof(CIPAddress6));
@@ -378,6 +390,7 @@ char* CBGPMessageHeader6::toString()
 
 	sprintf(temp,"src: %s", m_src_ip.toString());
 	sprintf(temp,"%s dest: %s length: %d type: %d",temp,m_dest_ip.toString(),m_length,m_type);
+	// sprintf(temp + strlen(temp)," dest: %s length: %d type: %d",m_dest_ip.toString(),m_length,m_type);
 
 	return temp;
 }
@@ -890,6 +903,7 @@ char* CBGPNLRI::toString(int af)
 		if(bytes > 4) bytes = 4;
 		CIPAddress addr;
 		memcpy(&addr,&m_hook,bytes);
+		// addr = *reinterpret_cast<const CIPAddress*>(&m_hook);
 		addr.ConvType();
 		sprintf(temp,"%s/%d",addr.toString(),prelen);
 	}else if(af==AF_INET6)
@@ -897,6 +911,7 @@ char* CBGPNLRI::toString(int af)
 		if(bytes > 16) bytes = 16;
 		CIPAddress6 addr6;
 		memcpy(&addr6,&m_hook,bytes);
+		// addr6 = *reinterpret_cast<const CIPAddress6*>(&m_hook);
 		addr6.ConvType();
 		sprintf(temp,"%s/%d",addr6.toString(),prelen);
 	}
@@ -911,6 +926,7 @@ CIPAddress CBGPNLRI::GetAddress()
 	if(bytes > 4) bytes = 4;
 	CIPAddress addr;
 	memcpy(&addr,&m_hook,bytes);
+	// addr = *reinterpret_cast<const CIPAddress*>(&m_hook);
 	addr.ConvType();
 	return addr;
 }
@@ -923,6 +939,7 @@ CIPAddress6 CBGPNLRI::GetAddress6()
 	if(bytes > 16) bytes = 16;
 	CIPAddress6 addr6;
 	memcpy(&addr6,&m_hook,bytes);
+	// addr6 = *reinterpret_cast<const CIPAddress6*>(&m_hook);
 	addr6.ConvType();
 	return addr6;
 }
@@ -1259,6 +1276,7 @@ u_int16_t CBGPPathAttr_ASPath::GetOriginAS()
 char* CBGPPathAttr_ASPath::toBriefString()
 {
 	static char temp[1024];
+	// temp[0] = '\0';
 	strcpy(temp, "PATH:");
 	for(unsigned int i = 0; i < GetASPathNumber(); i ++) {
 		CBGPASPath* path = GetASPath(i);
@@ -1267,6 +1285,7 @@ char* CBGPPathAttr_ASPath::toBriefString()
 		}
 		for(int j = 0; j < path->m_length; j ++) {
 			sprintf(temp, "%s %u", temp, path->GetASN(j));
+			// sprintf(temp + strlen(temp), " %u", path->GetASN(j));
 		}
 		if(path->m_type == BGP_PATH_ATTR_AS_PATH_SET) {
 			strcat(temp, "}");
@@ -1282,6 +1301,7 @@ CBGPASPath::CBGPASPath()
 char* CBGPASPath::toString()
 {
 	static char temp[1024];
+	// temp[0] = '\0';
 	switch(m_type)
 	{
 	case BGP_PATH_ATTR_AS_PATH_SET:
@@ -1294,6 +1314,7 @@ char* CBGPASPath::toString()
 	for(int i=0;i<m_length;i++)
 	{
 		sprintf(temp,"%s %u",temp,GetASN(i));
+		// sprintf(temp + strlen(temp), " %u", GetASN(i));
 	}
 	return temp;
 }
@@ -1335,12 +1356,13 @@ u_int32_t CBGPPathAttr_Community::GetCommunity(int idx)
 char* CBGPPathAttr_Community::toString() 
 {
 	static char temp[256];
-
+	// temp[0] = '\0';
 	strcpy(temp, "Community: ");
 
 	for(int i = 0; i < GetCommunityNumber(); i ++) 
 	{
 		sprintf(temp, "%s[%08X]", temp, GetCommunity(i));
+		// sprintf(temp + strlen(temp), "[%08X]", GetCommunity(i));
 	}
 	return temp;
 }
@@ -1348,10 +1370,12 @@ char* CBGPPathAttr_Community::toString()
 char* CBGPPathAttr_Community::toBriefString()
 {
 	static char temp[256];
+	// temp[0] = '\0';
 	strcpy(temp, "COMM: ");
 	for(int i = 0; i < GetCommunityNumber(); i ++) 
 	{
 		sprintf(temp, "%s[%08X]", temp, GetCommunity(i));
+		// sprintf(temp + strlen(temp), "[%08X]", GetCommunity(i));
 	}
 	return temp;
 }
@@ -1379,7 +1403,7 @@ int readBGPUpdateMessageV4(char* filename, int (*processUpdateMessage4)(time_t t
 	if(processUpdateMessage4 == NULL) {
 		return 0;
 	}
-	
+
 	while(!bgplog.isEnd())
 	{
 		CBGPUpdateHeader header(&bgplog);

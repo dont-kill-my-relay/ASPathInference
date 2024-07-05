@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2.7
 
 import BaseHTTPServer;
 
@@ -74,7 +74,7 @@ def httpServerRun(handlelist, pt):
     global handleHash, port;
     handleHash = handlelist;
     port = pt;
-    server_address = ('', port);
+    server_address = ('0.0.0.0', port);
     httpd = BaseHTTPServer.HTTPServer(server_address, CAppServer);
     httpd.serve_forever();
 

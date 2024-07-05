@@ -47,6 +47,10 @@ bool CIPAddress::ParseStr(const char* address)
 
 	char* q=addrtmp;
 	char* p=strchr(q,'.');
+	if (p==NULL) {
+		m_address=0;
+		return false;
+	}
 	strncpy(temp,q,p-q);
 	temp[p-q]='\0';
 	sscanf(temp,"%d",&a);

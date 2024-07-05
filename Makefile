@@ -11,7 +11,9 @@ $(BUILD_SUBDIRS):
 	@cd $@ && $(MAKE)
 
 
-run: $(SCRIPT_SUBDIR)
+%.run:
+	echo "ASPathInference service starts ...\n"
+	./script/batchProcess.pl /app $*
 
 .PHONY: $(SCRIPT_SUBDIR)
 

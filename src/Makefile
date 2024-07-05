@@ -14,8 +14,8 @@ CDEBUG = -g -DPNG_DEBUG=5 -D_SET_DEBUG_
 LDDEBUG =
 CRELEASE = -D_FILE_OFFSET_BITS=64 -D_LARGEFILE_SOURCE -g #-O2
 LDRELEASE = #-s
-CFLAGS = -Wall -Werror -Wno-unused $(CRELEASE)
-CXXFLAGS = -Wall -Werror -Wno-unused $(CRELEASE)
+CFLAGS =  -Wno-unused -std=c11 $(CRELEASE)
+CXXFLAGS =  -Wno-unused -std=c++11 $(CRELEASE)
 LDFLAGS = -L. -lz -lm $(LDRELEASE)
 TARGET = ../bin/
 
