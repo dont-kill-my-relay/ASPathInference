@@ -29,7 +29,7 @@ COPY --from=build /app/bin/Get* /app/bin/
 RUN apk add libstdc++6 libstdc++
 RUN pip install dnspython
 RUN mkdir -p /app/log/
-
+LABEL org.opencontainers.image.source=https://github.com/dont-kill-my-relay/as-path-inference
 EXPOSE 61002
 CMD /app/script/inferPath.py --db-path /app/data/oixdb --as-relationship /app/data/oix_relation_degree --link-preference /app/data/oix_preference --prefix-list /app/data/oix_prefixlist --pid /app/log/pid
 

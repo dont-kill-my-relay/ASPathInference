@@ -1,0 +1,26 @@
+services:
+  reverse-proxy:
+    image: traefik:v2.11.0
+    # Enables the web UI and tells Traefik to listen to docker
+    command: --api.insecure=true --providers.docker 
+    ports:
+      # The HTTP port
+      - "61002:80"
+      # The Web UI (enabled by --api.insecure=true)
+      - "8080:8080"
+    volumes:
+      # So that Traefik can listen to the Docker events
+      - /var/run/docker.sock:/var/run/docker.sock
+  inference:
+    # Update the tag to match the date you want, see the available tags at
+    # https://github.com/dont-kill-my-relay/as-path-inference/pkgs/container/as-path-inference
+    image: ghcr.io/dont-kill-my-relay/as-path-inference:2023-05-17
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gao.rule=Host(`localhost`)"
+      - "traefik.http.services.gao.loadbalancer.server.port=61002"
+    deploy:
+      mode: replicated
+      # Increase the number of replicas to have more instances of the inference running at the same time.
+      # Each replica needs about 500 Mb of memory and 1 CPU core
+      replicas: 10

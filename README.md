@@ -4,10 +4,49 @@ ASPathInference
 Introduction
 ------------------
 
-This is a tool for inferring the Internet AS level paths from any source AS to any destination prefixes. Please refer to http://rio.ecs.umass.edu/~jqiu/aspath_tech.pdf for further information.
+This is a tool for inferring the Internet AS level paths from any source AS to any destination prefixes. 
+Please refer to http://rio.ecs.umass.edu/~jqiu/aspath_tech.pdf for further information.
+
+
+Running with Docker
+-------------------
+
+We provide prebuilt Docker images for some dates on this repository. 
+You can use the `docker-compose.yml` file to get started with a basic configuration: 10 instances of the inference 
+software and a reverse web proxy to load balance the requests.
+
+Install Docker and Docker Compose and use the following command to start the stack. 
+The containers need a few seconds to start before they can accept requests. 
+
+```shell
+docker compose up -d
+```
+
+Test once it is running
+
+```shell
+curl "http://localhost:61002/infer?algorithm_=LUF&prefix_=51.91.110.66&src_=2611&use_known_=NO_FEEDBACK"
+```
+
+License
+------------------
+
+ASPathInference is released under the GNU General Public License. A copy of the license is included in the distribution. It is also available from GNU. 
+
+
+Docker image
+-------------------
+
+Build the docker image for a specific time for BGP data with the BGP_DATE argument.
+
+```shell
+docker build -t as-inference:2021-12-01 --build-arg="BGP_DATE=2021-12-01-0800" --no-cache --progress=plain . 2>&1 | tee build.log
+```
 
 
 
+<details>
+  <summary>Original README</summary>
 
 Software requirement
 ------------------
@@ -27,13 +66,17 @@ This software is a combination of binary executive codes and scripts. Sub-direct
 
 1) compile binary codes. Issue 
 
-   # make 
+   ```shell
+   make
+   ```
 
   to compile all necessary binary codes.
 
 2) collect and process data and start path inference service. Issue
 
-   # make run
+   ```shell
+   make run
+   ```
  
    to start the scripts. The script first automatically downloads the most recent BGP tables from routeviews and RIPE RIS data repositories into subdirectory "tables", and store the AS paths in a easily accessible way. Then the scripts infer AS relationships and other information. Before the information is completely inferred, the results are stored in a temporary sub-directory "tmp". After the completion of the inference process, sub-directory "tmp" will be renamed as "data". The process could take hours. Finally, the inference service script "pathInferenceServer.py" will start on the information stored in sub-directory "data".
 
@@ -51,12 +94,4 @@ Possible compiling issues
 
 In src/PYGetSurePath.cpp, the #include header file Python.h is pointing to $INCLUDE/python2.4/Python.h. On your system, if the header file is in other position, please change the #include directory accordingly.
 
-
-
-
-License
-------------------
-
-ASPathInference is released under the GNU General Public License. A copy of the license is included in the distribution. It is also available from GNU. 
-
-
+</details>
